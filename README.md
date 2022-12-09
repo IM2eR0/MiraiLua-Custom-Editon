@@ -1,7 +1,7 @@
 # MiraiLua For Linux
--MiraiLua是基于 [Mirai.Net](https://github.com/SinoAHpx/Mirai.Net) / [mirai-api-http](https://github.com/project-mirai/mirai-api-http) 编写的以Lua为脚本引擎的QQ机器人框架。
--原作者：[ABSD546316187](https://github.com/ABSD546316187)
--原项目地址：[传送门](https://github.com/ABSD546316187/MiraiLua)
+- MiraiLua是基于 [Mirai.Net](https://github.com/SinoAHpx/Mirai.Net) / [mirai-api-http](https://github.com/project-mirai/mirai-api-http) 编写的以Lua为脚本引擎的QQ机器人框架。
+- 原作者：[ABSD546316187](https://github.com/ABSD546316187)
+- 原项目地址：[传送门](https://github.com/ABSD546316187/MiraiLua)
 
 ## 使用方法
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reactive.Linq;
+using System.Linq;
 using Mirai.Net.Data.Messages.Receivers;
 using Mirai.Net.Sessions;
 using KeraLua;
@@ -28,7 +29,7 @@ namespace MiraiLua
         static void FileChanged(object sender, FileSystemEventArgs e)
         {
             Thread.Sleep(10);
-            Util.Print("文件更新..." + e.FullPath);
+            // Util.Print("文件更新..." + e.FullPath);
             if (lua.DoFile(e.FullPath))
             {
                 Util.Print(lua.ToString(-1), Util.PrintType.ERROR, ConsoleColor.Red);
@@ -36,20 +37,105 @@ namespace MiraiLua
             }
         }
 
-        static public void LoadPlugins()
+        static public void LoadLibPlugins()
         {
-            if (!Directory.Exists(@".\plugins"))
-                Directory.CreateDirectory(@".\plugins");
+            if (!Directory.Exists(@"./base-libs"))
+            {
+                Directory.CreateDirectory(@"./base-libs");
+                Util.Print("未找到前置插件目录，创建中...", Util.PrintType.WARNING);
+            }
             else
             {
-                DirectoryInfo dir = new DirectoryInfo(@".\plugins");
+                Util.Print("正在加载 MiraiLua 必要前置....", Util.PrintType.INFO);
+                DirectoryInfo dir = new DirectoryInfo(@"./base-libs");
+                DirectoryInfo[] ds = dir.GetDirectories();
+                ds = ds.OrderBy(d => d.Name).ToArray();
+
+                foreach (DirectoryInfo d in ds)
+                {
+                    FileSystemWatcher watcher = new FileSystemWatcher();
+                    watcher.Changed += new FileSystemEventHandler(FileChanged);
+                    watcher.Path = @"./base-libs/" + d.Name;
+                    watcher.EnableRaisingEvents = true;
+
+                    FileInfo[] fs = d.GetFiles();
+                    fs = fs.OrderBy(f => f.Name).ToArray();
+                    //lua.DoFile(f.FullName);
+                    foreach (FileInfo f in fs)
+                    {
+                        if (f.Extension == ".lua")
+                        {
+                            Util.Print("> " + d.Name + "/" + f.Name);
+
+                            if (lua.DoFile(@"./base-libs/" + d.Name + "/" + f.Name))
+                            {
+                                Util.Print(lua.ToString(-1), Util.PrintType.ERROR, ConsoleColor.Red);
+                                lua.Pop(1);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        static public void LoadUserLib()
+        {
+            if (!Directory.Exists(@"./user-libs"))
+            {
+                Directory.CreateDirectory(@"./user-libs");
+                Util.Print("未找到前置插件目录，创建中...", Util.PrintType.WARNING);
+            }
+            else
+            {
+                Util.Print("正在加载用户插件前置...", Util.PrintType.INFO);
+                DirectoryInfo dir = new DirectoryInfo(@"./user-libs");
+                DirectoryInfo[] ds = dir.GetDirectories();
+                ds = ds.OrderBy(d => d.Name).ToArray();
+
+                foreach (DirectoryInfo d in ds)
+                {
+                    FileSystemWatcher watcher = new FileSystemWatcher();
+                    watcher.Changed += new FileSystemEventHandler(FileChanged);
+                    watcher.Path = @"./user-libs/" + d.Name;
+                    watcher.EnableRaisingEvents = true;
+
+                    FileInfo[] fs = d.GetFiles();
+                    fs = fs.OrderBy(f => f.Name).ToArray();
+                    //lua.DoFile(f.FullName);
+                    foreach (FileInfo f in fs)
+                    {
+                        if (f.Extension == ".lua")
+                        {
+                            // Util.Print("> " + d.Name + "/" + f.Name);
+
+                            if (lua.DoFile(@"./user-libs/" + d.Name + "/" + f.Name))
+                            {
+                                Util.Print(lua.ToString(-1), Util.PrintType.ERROR, ConsoleColor.Red);
+                                lua.Pop(1);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        static public void LoadPlugins()
+        {
+            if (!Directory.Exists(@"./user-plugins"))
+            {
+                Directory.CreateDirectory(@"./user-plugins");
+                Util.Print("未找到插件目录，创建中...", Util.PrintType.WARNING);
+            }
+            else
+            {
+                Util.Print("正在加载用户插件...", Util.PrintType.INFO);
+                DirectoryInfo dir = new DirectoryInfo(@"./user-plugins");
                 DirectoryInfo[] ds = dir.GetDirectories();
 
                 foreach (DirectoryInfo d in ds)
                 {
                     FileSystemWatcher watcher = new FileSystemWatcher();
                     watcher.Changed += new FileSystemEventHandler(FileChanged);
-                    watcher.Path = @".\plugins\" + d.Name;
+                    watcher.Path = @"./user-plugins/" + d.Name;
                     watcher.EnableRaisingEvents = true;
 
                     FileInfo[] fs = d.GetFiles();
@@ -58,8 +144,9 @@ namespace MiraiLua
                     {
                         if (f.Extension == ".lua")
                         {
-                            Util.Print("加载插件..." + d.Name + "\\" + f.Name);
-                            if (lua.DoFile(@".\plugins\" + d.Name + "\\" + f.Name))
+                            //Util.Print("加载插件..." + d.Name + "/" + f.Name);
+
+                            if (lua.DoFile(@"./user-plugins/" + d.Name + "/" + f.Name))
                             {
                                 Util.Print(lua.ToString(-1), Util.PrintType.ERROR, ConsoleColor.Red);
                                 lua.Pop(1);
@@ -72,13 +159,16 @@ namespace MiraiLua
 
         static int Main(string[] args)
         {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write("MiraiLua v1.0 - Powered by ABSD\n");
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.Write("MiraiLua for Linux ");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write("by OriginalSnow\n");
 
             Util.Print("正在启动MiraiLua...");
 
             ////////////////LUA///////////////////
             lua.Encoding = Encoding.UTF8;
+            Util.Print("当前正在使用编码：" + lua.Encoding);
 
             lua.Register("print",LFunctions.Print);
 
@@ -91,9 +181,13 @@ namespace MiraiLua
             Util.PushFunction("api", "HttpGet", lua, LFunctions.HttpGet);
             Util.PushFunction("api", "UploadImg", lua, LFunctions.UploadImg);
             Util.PushFunction("api", "At", lua, LFunctions.At);
+
             lua.Pop(lua.GetTop());
             //加载脚本
+            LoadLibPlugins();
+            LoadUserLib();
             LoadPlugins();
+
             //////////////////////////////////////
             try 
             {
@@ -243,7 +337,10 @@ namespace MiraiLua
                 if (cargs[0] == "test")
                     Test();
                 if (cargs[0] == "reload")
+                {
+                    LoadUserLib();
                     LoadPlugins();
+                }
                 else if (cargs[0] == "help")
                 {
                     Util.Print("帮助列表：", Util.PrintType.INFO);

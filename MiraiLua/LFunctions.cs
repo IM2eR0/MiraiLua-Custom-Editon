@@ -31,6 +31,7 @@ namespace MiraiLua
         }
         static public int Reload(IntPtr p)
         {
+            Program.LoadUserLib();
             Program.LoadPlugins();
 
             return 0;

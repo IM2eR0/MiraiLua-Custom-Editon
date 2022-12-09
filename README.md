@@ -42,5 +42,5 @@ end
 - user-libs 文件夹用于存放用户前置
 - user-plugins 文件夹用于存放用户插件
 
-- 加载顺序如下 base-libs > user-libs > user-plugins
-- 每个文件夹下的插件按照文件夹名的先后顺序进行排序 例：特殊符号 > 数字 0~9 > 大写字母 A~Z > 小写字母 a~z
+- [加载顺序如下 base-libs > user-libs > user-plugins]
+- [每个文件夹下的插件按照文件夹名的先后顺序进行排序 例：特殊符号 > 数字 0~9 > 大写字母 A~Z > 小写字母 a~z]

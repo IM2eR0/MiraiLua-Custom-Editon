@@ -73,7 +73,11 @@ namespace MiraiLua
             lua.PushCopy(3);
             lua.SetGlobal(k2);
 
+<<<<<<< HEAD
             hs.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:107.0) Gecko/20100101 Firefox/107.0");
+=======
+            hs.Add("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:107.0) Gecko/20100101 Firefox/107.0" );
+>>>>>>> 4b8ad74e9010fbdc9c3bbcfa685a471244811f3b
 
             if (lua.Type(4) == LuaType.Table)
             {
@@ -84,12 +88,20 @@ namespace MiraiLua
                     lua.PushCopy(-2);
                     if (lua.Type(-1) == LuaType.String && lua.Type(-2) == LuaType.String)
                     {
+<<<<<<< HEAD
                         if (hs.TryGetValue(lua.ToString(-1), out string v))
+=======
+                        if (hs.TryGetValue(lua.ToString(-1),out _))
+>>>>>>> 4b8ad74e9010fbdc9c3bbcfa685a471244811f3b
                             hs[lua.ToString(-1)] = lua.ToString(-2);
                         else
                             hs.Add(lua.ToString(-1), lua.ToString(-2));
                     }
+<<<<<<< HEAD
 
+=======
+                    
+>>>>>>> 4b8ad74e9010fbdc9c3bbcfa685a471244811f3b
                     lua.Pop(2);
                 }
                 lua.Pop(1);
@@ -141,7 +153,15 @@ namespace MiraiLua
                 {
                     lua.PushCopy(-2);
                     if (lua.Type(-1) == LuaType.String && lua.Type(-2) == LuaType.String)
+<<<<<<< HEAD
                         hs.Add(lua.ToString(-1), lua.ToString(-2));
+=======
+                        if (hs.TryGetValue(lua.ToString(-1), out _))
+                            hs[lua.ToString(-1)] = lua.ToString(-2);
+                        else
+                            hs.Add(lua.ToString(-1), lua.ToString(-2));
+
+>>>>>>> 4b8ad74e9010fbdc9c3bbcfa685a471244811f3b
                     lua.Pop(2);
                 }
                 lua.Pop(1);

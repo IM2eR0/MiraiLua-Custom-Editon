@@ -9,7 +9,10 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Xml;
+<<<<<<< HEAD
 using System.Linq;
+=======
+>>>>>>> 4b8ad74e9010fbdc9c3bbcfa685a471244811f3b
 
 namespace MiraiLua
 {
@@ -31,7 +34,11 @@ namespace MiraiLua
         static void FileChanged(object sender, FileSystemEventArgs e)
         {
             Thread.Sleep(10);
+<<<<<<< HEAD
             //Util.Print("Œƒº˛∏¸–¬..." + e.FullPath);
+=======
+            Util.Print("Êñá‰ª∂Êõ¥Êñ∞..." + e.FullPath);
+>>>>>>> 4b8ad74e9010fbdc9c3bbcfa685a471244811f3b
             lock (o)
             {
                 if (lua.DoFile(e.FullPath))
@@ -70,9 +77,15 @@ namespace MiraiLua
                     {
                         if (f.Extension == ".lua")
                         {
+<<<<<<< HEAD
                             Util.Print("> " + d.Name + "/" + f.Name);
 
                             if (lua.DoFile(@"./base-libs/" + d.Name + "/" + f.Name))
+=======
+                            Util.Print("Âä†ËΩΩÊèí‰ª∂..." + d.Name + "\\" + f.Name);
+
+                            if (lua.DoFile(@".\plugins\" + d.Name + "\\" + f.Name))
+>>>>>>> 4b8ad74e9010fbdc9c3bbcfa685a471244811f3b
                             {
                                 Util.Print(lua.ToString(-1), Util.PrintType.ERROR, ConsoleColor.Red);
                                 lua.Pop(1);
@@ -82,6 +95,7 @@ namespace MiraiLua
                 }
             }
         }
+<<<<<<< HEAD
 
         static public void LoadUserLib()
         {
@@ -171,6 +185,12 @@ namespace MiraiLua
             Console.Write("\nby OriginalSnow\n");
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.Write("\n\n\tMiraiLua by ABSD\n\n\n");
+=======
+        static int Main(string[] args)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write("MiraiLua v1.1 - Powered by ABSD\n");
+>>>>>>> 4b8ad74e9010fbdc9c3bbcfa685a471244811f3b
 
             Util.Print("’˝‘⁄∆Ù∂ØMiraiLua...");
 
@@ -232,11 +252,18 @@ namespace MiraiLua
             {
                 if (x.Sender.Id == bot.QQ)
                     return;
+<<<<<<< HEAD
 
                 string msg = x.MessageChain.GetPlainMessage();
 
                 lock (o)
                 {
+=======
+                
+                string msg = x.MessageChain.GetPlainMessage();
+                
+                lock (o) {
+>>>>>>> 4b8ad74e9010fbdc9c3bbcfa685a471244811f3b
                     lua.GetGlobal("api");
                     lua.GetField(-1, "OnReceiveGroup");
 
@@ -270,7 +297,11 @@ namespace MiraiLua
 
                     lua.Remove(-2);
 
+<<<<<<< HEAD
                     Util.Print(String.Format("[{0:G}][{1:G}]£∫{2:G}", x.GroupName, x.Sender.Name, msg));
+=======
+                    Util.Print(String.Format("[{0:G}][{1:G}]Ôºö{2:G}", x.GroupName, x.Sender.Name, msg));
+>>>>>>> 4b8ad74e9010fbdc9c3bbcfa685a471244811f3b
 
                     lua.SetField(-2, "Data");
 
@@ -295,7 +326,11 @@ namespace MiraiLua
                 {
                     if (cargs.GetLength(0) < 1)
                     {
+<<<<<<< HEAD
                         Util.Print("Œﬁ–ßµƒ√¸¡Ó. “™ªÒ»°∞Ô÷˙«Î ‰»Îhelp.", Util.PrintType.INFO, ConsoleColor.Red);
+=======
+                        Util.Print("Êó†ÊïàÁöÑÂëΩ‰ª§. Ë¶ÅËé∑ÂèñÂ∏ÆÂä©ËØ∑ËæìÂÖ•help.", Util.PrintType.INFO, ConsoleColor.Red);
+>>>>>>> 4b8ad74e9010fbdc9c3bbcfa685a471244811f3b
                         continue;
                     }
 
@@ -304,6 +339,7 @@ namespace MiraiLua
                     if (cargs[0] == "test")
                         Test();
                     if (cargs[0] == "reload")
+<<<<<<< HEAD
                     {
                         LoadUserLib();
                         LoadPlugins();
@@ -315,6 +351,16 @@ namespace MiraiLua
                         Util.Print("reload - ÷ÿ‘ÿ≤Âº˛", Util.PrintType.INFO);
                         Util.Print("exit - ÕÀ≥ˆMiraiLua", Util.PrintType.INFO);
                         Util.Print("lua <¥˙¬Î> - ÷¥––“ª∂ŒluaŒƒ±æ", Util.PrintType.INFO);
+=======
+                        LoadPlugins();
+                    else if (cargs[0] == "help")
+                    {
+                        Util.Print("Â∏ÆÂä©ÂàóË°®Ôºö", Util.PrintType.INFO);
+                        Util.Print("help - Ëé∑ÂèñÂ∏ÆÂä©", Util.PrintType.INFO);
+                        Util.Print("reload - ÈáçËΩΩÊèí‰ª∂", Util.PrintType.INFO);
+                        Util.Print("exit - ÈÄÄÂá∫MiraiLua", Util.PrintType.INFO);
+                        Util.Print("lua <‰ª£Á†Å> - ÊâßË°å‰∏ÄÊÆµluaÊñáÊú¨", Util.PrintType.INFO);
+>>>>>>> 4b8ad74e9010fbdc9c3bbcfa685a471244811f3b
                         Util.Print("Powered by ABSD", Util.PrintType.INFO);
                     }
                     else if (cargs[0] == "lua")
@@ -335,10 +381,17 @@ namespace MiraiLua
                             }
                         }
                         else
+<<<<<<< HEAD
                             Util.Print("√¸¡Ó∏Ò Ω: lua <¥˙¬Î>", Util.PrintType.INFO, ConsoleColor.Red);
                     }
                     else
                         Util.Print("Œﬁ–ßµƒ√¸¡Ó. “™ªÒ»°∞Ô÷˙«Î ‰»Îhelp.", Util.PrintType.INFO, ConsoleColor.Red);
+=======
+                            Util.Print("ÂëΩ‰ª§Ê†ºÂºè: lua <‰ª£Á†Å>", Util.PrintType.INFO, ConsoleColor.Red);
+                    }
+                    else
+                        Util.Print("Êó†ÊïàÁöÑÂëΩ‰ª§. Ë¶ÅËé∑ÂèñÂ∏ÆÂä©ËØ∑ËæìÂÖ•help.", Util.PrintType.INFO, ConsoleColor.Red);
+>>>>>>> 4b8ad74e9010fbdc9c3bbcfa685a471244811f3b
                 }
             }
             return 0;

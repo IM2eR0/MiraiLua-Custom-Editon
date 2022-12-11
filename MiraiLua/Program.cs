@@ -1,14 +1,15 @@
-ï»¿using System;
+using System;
 using System.Reactive.Linq;
-using System.Linq;
 using Mirai.Net.Data.Messages.Receivers;
 using Mirai.Net.Sessions;
+using Manganese.Text;
+
 using KeraLua;
 using System.IO;
 using System.Text;
 using System.Threading;
 using System.Xml;
-using Mirai.Net.Data.Messages;
+using System.Linq;
 
 namespace MiraiLua
 {
@@ -17,10 +18,11 @@ namespace MiraiLua
         static public Util util = new Util();
         static public Lua lua = new Lua();
         static public MiraiBot bot;
+        static public object o = new object();
         static void Test()
         {
             lua.GetGlobal("test");
-            lua.PCall(0,0,0);
+            lua.PCall(0, 0, 0);
             if (lua.GetTop() >= 1)
                 Util.Print(lua.ToString(-1), Util.PrintType.ERROR, ConsoleColor.Red);
             lua.Pop(lua.GetTop());
@@ -29,11 +31,14 @@ namespace MiraiLua
         static void FileChanged(object sender, FileSystemEventArgs e)
         {
             Thread.Sleep(10);
-            // Util.Print("æ–‡ä»¶æ›´æ–°..." + e.FullPath);
-            if (lua.DoFile(e.FullPath))
+            //Util.Print("ÎÄ¼ş¸üĞÂ..." + e.FullPath);
+            lock (o)
             {
-                Util.Print(lua.ToString(-1), Util.PrintType.ERROR, ConsoleColor.Red);
-                lua.Pop(1);
+                if (lua.DoFile(e.FullPath))
+                {
+                    Util.Print(lua.ToString(-1), Util.PrintType.ERROR, ConsoleColor.Red);
+                    lua.Pop(1);
+                }
             }
         }
 
@@ -42,11 +47,11 @@ namespace MiraiLua
             if (!Directory.Exists(@"./base-libs"))
             {
                 Directory.CreateDirectory(@"./base-libs");
-                Util.Print("æœªæ‰¾åˆ°å‰ç½®æ’ä»¶ç›®å½•ï¼Œåˆ›å»ºä¸­...", Util.PrintType.WARNING);
+                Util.Print("Î´ÕÒµ½Ç°ÖÃ²å¼şÄ¿Â¼£¬´´½¨ÖĞ...", Util.PrintType.WARNING);
             }
             else
             {
-                Util.Print("æ­£åœ¨åŠ è½½ MiraiLua å¿…è¦å‰ç½®....", Util.PrintType.INFO);
+                Util.Print("ÕıÔÚ¼ÓÔØ MiraiLua ±ØÒªÇ°ÖÃ....", Util.PrintType.INFO);
                 DirectoryInfo dir = new DirectoryInfo(@"./base-libs");
                 DirectoryInfo[] ds = dir.GetDirectories();
                 ds = ds.OrderBy(d => d.Name).ToArray();
@@ -83,11 +88,11 @@ namespace MiraiLua
             if (!Directory.Exists(@"./user-libs"))
             {
                 Directory.CreateDirectory(@"./user-libs");
-                Util.Print("æœªæ‰¾åˆ°å‰ç½®æ’ä»¶ç›®å½•ï¼Œåˆ›å»ºä¸­...", Util.PrintType.WARNING);
+                Util.Print("Î´ÕÒµ½Ç°ÖÃ²å¼şÄ¿Â¼£¬´´½¨ÖĞ...", Util.PrintType.WARNING);
             }
             else
             {
-                Util.Print("æ­£åœ¨åŠ è½½ç”¨æˆ·æ’ä»¶å‰ç½®...", Util.PrintType.INFO);
+                Util.Print("ÕıÔÚ¼ÓÔØÓÃ»§²å¼şÇ°ÖÃ...", Util.PrintType.INFO);
                 DirectoryInfo dir = new DirectoryInfo(@"./user-libs");
                 DirectoryInfo[] ds = dir.GetDirectories();
                 ds = ds.OrderBy(d => d.Name).ToArray();
@@ -123,11 +128,11 @@ namespace MiraiLua
             if (!Directory.Exists(@"./user-plugins"))
             {
                 Directory.CreateDirectory(@"./user-plugins");
-                Util.Print("æœªæ‰¾åˆ°æ’ä»¶ç›®å½•ï¼Œåˆ›å»ºä¸­...", Util.PrintType.WARNING);
+                Util.Print("Î´ÕÒµ½²å¼şÄ¿Â¼£¬´´½¨ÖĞ...", Util.PrintType.WARNING);
             }
             else
             {
-                Util.Print("æ­£åœ¨åŠ è½½ç”¨æˆ·æ’ä»¶...", Util.PrintType.INFO);
+                Util.Print("ÕıÔÚ¼ÓÔØÓÃ»§²å¼ş...", Util.PrintType.INFO);
                 DirectoryInfo dir = new DirectoryInfo(@"./user-plugins");
                 DirectoryInfo[] ds = dir.GetDirectories();
 
@@ -144,7 +149,7 @@ namespace MiraiLua
                     {
                         if (f.Extension == ".lua")
                         {
-                            //Util.Print("åŠ è½½æ’ä»¶..." + d.Name + "/" + f.Name);
+                            //Util.Print("¼ÓÔØ²å¼ş..." + d.Name + "/" + f.Name);
 
                             if (lua.DoFile(@"./user-plugins/" + d.Name + "/" + f.Name))
                             {
@@ -156,21 +161,24 @@ namespace MiraiLua
                 }
             }
         }
-
         static int Main(string[] args)
         {
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.Write("MiraiLua for Linux ");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write("v1.1");
             Console.ForegroundColor = ConsoleColor.White;
-            Console.Write("by OriginalSnow\n");
+            Console.Write("\nby OriginalSnow\n");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.Write("\n\n\tMiraiLua by ABSD\n\n\n");
 
-            Util.Print("æ­£åœ¨å¯åŠ¨MiraiLua...");
+            Util.Print("ÕıÔÚÆô¶¯MiraiLua...");
 
             ////////////////LUA///////////////////
             lua.Encoding = Encoding.UTF8;
-            Util.Print("å½“å‰æ­£åœ¨ä½¿ç”¨ç¼–ç ï¼š" + lua.Encoding);
+            Util.Print("µ±Ç°ÕıÔÚÊ¹ÓÃ±àÂë£º" + lua.Encoding);
 
-            lua.Register("print",LFunctions.Print);
+            lua.Register("print", LFunctions.Print);
 
             lua.NewTable();
             lua.SetGlobal("api");
@@ -178,26 +186,25 @@ namespace MiraiLua
             Util.PushFunction("api", "SendGroupMsg", lua, LFunctions.SendGroupMsg);
             Util.PushFunction("api", "SendGroupMsgEX", lua, LFunctions.SendGroupMsgEX);
             Util.PushFunction("api", "OnReceiveGroup", lua, LFunctions.OnReceiveGroup);
-            Util.PushFunction("api", "HttpGet", lua, LFunctions.HttpGet);
+            Util.PushFunction("api", "HttpGet", lua, LFunctions.HttpGetA);
+            Util.PushFunction("api", "HttpPost", lua, LFunctions.HttpPostA);
             Util.PushFunction("api", "UploadImg", lua, LFunctions.UploadImg);
             Util.PushFunction("api", "At", lua, LFunctions.At);
-
             lua.Pop(lua.GetTop());
-            //åŠ è½½è„šæœ¬
+            //¼ÓÔØ½Å±¾
             LoadLibPlugins();
             LoadUserLib();
             LoadPlugins();
-
             //////////////////////////////////////
-            try 
+            try
             {
-                //XmlDocumentè¯»å–xmlæ–‡ä»¶
+                //XmlDocument¶ÁÈ¡xmlÎÄ¼ş
                 XmlDocument xmlDoc = new XmlDocument();
                 xmlDoc.Load("settings.xml");
-                //è·å–xmlæ ¹èŠ‚ç‚¹
+                //»ñÈ¡xml¸ù½Úµã
                 XmlNode xmlRoot = xmlDoc.DocumentElement;
-                //æ ¹æ®èŠ‚ç‚¹é¡ºåºé€æ­¥è¯»å–
-                //è¯»å–ç¬¬ä¸€ä¸ªnameèŠ‚ç‚¹
+                //¸ù¾İ½ÚµãË³ĞòÖğ²½¶ÁÈ¡
+                //¶ÁÈ¡µÚÒ»¸öname½Úµã
                 string a = xmlRoot.SelectSingleNode("Address").InnerText;
                 string q = xmlRoot.SelectSingleNode("QQ").InnerText;
                 string v = xmlRoot.SelectSingleNode("Key").InnerText;
@@ -211,167 +218,128 @@ namespace MiraiLua
 
                 bot.LaunchAsync();
 
-                Util.Print(String.Format("Botå·²è¿æ¥ï¼š{0:G} / {1:G}", a, q));
+                Util.Print(String.Format("BotÒÑÁ¬½Ó£º{0:G} / {1:G}", a, q));
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                Util.Print(String.Format("å‘ç”Ÿé”™è¯¯ï¼š{0:G}\nè¯·æ£€æŸ¥settings.xmlæ˜¯å¦å­˜åœ¨ä¸”åˆæ³•.", e.Message));
+                Util.Print(String.Format("·¢Éú´íÎó£º{0:G}\nÇë¼ì²ésettings.xmlÊÇ·ñ´æÔÚÇÒºÏ·¨.", e.Message));
                 Console.ReadLine();
                 return 0;
             }
-            
-            //æ¥æ”¶æ¶ˆæ¯
+
+            //½ÓÊÕÏûÏ¢
             bot.MessageReceived.OfType<GroupMessageReceiver>().Subscribe(x =>
             {
                 if (x.Sender.Id == bot.QQ)
                     return;
-                string msg = "";
 
-                lua.GetGlobal("api");
-                lua.GetField(-1, "OnReceiveGroup");
+                string msg = x.MessageChain.GetPlainMessage();
 
-                lua.NewTable();
-
-                lua.PushString(x.Sender.Id);
-                lua.SetField(-2, "SenderID");
-
-                lua.PushString(x.Sender.Name);
-                lua.SetField(-2, "SenderName");
-
-                lua.PushNumber((int)x.Sender.Permission);
-                lua.SetField(-2, "SenderRank");
-
-                lua.PushString(x.GroupId);
-                lua.SetField(-2, "GroupID");
-
-                lua.PushString(x.GroupName);
-                lua.SetField(-2, "GroupName");
-
-                lua.PushString(x.Type.ToString());
-                lua.SetField(-2, "From");
-
-                lua.NewTable();
-
-                int i = 1;
-                foreach (var s in x.MessageChain)
+                lock (o)
                 {
-                    string s0 = s.ToString().Replace(s.Type.ToString() + "Message ", "");
-                    s0 = s0.Replace(" = ","\":\"");
-                    s0 = s0.Replace("{ ", "{\"");
-                    s0 = s0.Replace(" }", "\"}");
-                    s0 = s0.Replace(", ", "\",\"");
-                    Util.Print(s0);
-
-                    lua.PushNumber(i);
+                    lua.GetGlobal("api");
+                    lua.GetField(-1, "OnReceiveGroup");
 
                     lua.NewTable();
 
+                    lua.PushString(x.Sender.Id);
+                    lua.SetField(-2, "SenderID");
+
+                    lua.PushString(x.Sender.Name);
+                    lua.SetField(-2, "SenderName");
+
+                    lua.PushNumber((int)x.Sender.Permission);
+                    lua.SetField(-2, "SenderRank");
+
+                    lua.PushString(x.GroupId);
+                    lua.SetField(-2, "GroupID");
+
+                    lua.PushString(x.GroupName);
+                    lua.SetField(-2, "GroupName");
+
+                    lua.PushString(x.Type.ToString());
+                    lua.SetField(-2, "From");
+
                     lua.GetGlobal("util");
                     //Util.Print(lua.ToString(-1)+" "+ lua.ToString(-2) + " "+ lua.ToString(-3) + " "+ lua.ToString(-4) + " ");
-                    lua.GetField(-1,"JSONToTable");
+                    lua.GetField(-1, "JSONToTable");
 
-                    lua.PushString(s0);
+                    lua.PushString(x.MessageChain.ToJsonString());
 
-                    lua.Call(1,1);
+                    lua.Call(1, 1);
 
                     lua.Remove(-2);
-                    lua.Remove(-2);
-                    /*
-                    lua.PushString(s.Type.ToString());
-                    lua.SetField(-2, "MsgType");
 
-                    if (s.Type == Messages.Source)
-                    {
-                    }
-                    else if (s.Type == Messages.At)
-                    {
-                    }
-                    else if (s.Type == Messages.AtAll)
-                    {
-                    }
-                    else if (s.Type == Messages.Image)
-                    {
-                    }
-                    else if (s.Type == Messages.Plain)
-                    {
-                        lua.PushString(x.MessageChain.GetPlainMessage());
-                        lua.SetField(-2, "MsgCon");
-                    }
-                    else if (s.Type == Messages.Voice)
-                    {
+                    Util.Print(String.Format("[{0:G}][{1:G}]£º{2:G}", x.GroupName, x.Sender.Name, msg));
 
-                    }
-                    */
-                    lua.SetTable(-3);
-                    i++;
+                    lua.SetField(-2, "Data");
+
+                    lua.PCall(1, 0, 0);
+                    lua.Remove(1);
+
+                    //Util.Print(lua.GetTop().ToString());
+
+                    if (lua.GetTop() >= 1)
+                        Util.Print(lua.ToString(-1), Util.PrintType.ERROR, ConsoleColor.Red);
+                    lua.Pop(lua.GetTop());
                 }
-
-                Util.Print(String.Format("[{0:G}][{1:G}]ï¼š{2:G}", x.GroupName, x.Sender.Name, msg));
-
-                lua.SetField(-2, "Data");
-
-                lua.PCall(1,0,0);
-                lua.Remove(1);
-
-                //Util.Print(lua.GetTop().ToString());
-
-                if (lua.GetTop() >= 1)
-                    Util.Print(lua.ToString(-1), Util.PrintType.ERROR, ConsoleColor.Red);
-                lua.Pop(lua.GetTop());
             });
 
-            Util.Print("å‡†å¤‡å°±ç»ª");
+            Util.Print("×¼±¸¾ÍĞ÷");
 
             while (true)
             {
                 string cmd = Console.ReadLine();
                 string[] cargs = cmd.Split(" ");
-                if (cargs.GetLength(0) < 1)
+                lock (o)
                 {
-                    Util.Print("æ— æ•ˆçš„å‘½ä»¤. è¦è·å–å¸®åŠ©è¯·è¾“å…¥help.", Util.PrintType.INFO, ConsoleColor.Red);
-                    continue;
-                }
-
-                if (cargs[0] == "exit")
-                    break;
-                if (cargs[0] == "test")
-                    Test();
-                if (cargs[0] == "reload")
-                {
-                    LoadUserLib();
-                    LoadPlugins();
-                }
-                else if (cargs[0] == "help")
-                {
-                    Util.Print("å¸®åŠ©åˆ—è¡¨ï¼š", Util.PrintType.INFO);
-                    Util.Print("help - è·å–å¸®åŠ©", Util.PrintType.INFO);
-                    Util.Print("reload - é‡è½½æ’ä»¶", Util.PrintType.INFO);
-                    Util.Print("exit - é€€å‡ºMiraiLua", Util.PrintType.INFO);
-                    Util.Print("lua <ä»£ç > - æ‰§è¡Œä¸€æ®µluaæ–‡æœ¬", Util.PrintType.INFO);
-                    Util.Print("Powered by ABSD", Util.PrintType.INFO);
-                }
-                else if (cargs[0] == "lua")
-                {
-                    if (cargs.GetLength(0) >= 2)
+                    if (cargs.GetLength(0) < 1)
                     {
-                        string s = cargs[1];
-                        for (int i = 0; i < cargs.GetLength(0); i++)
-                        {
-                            if (i > 1)
-                                s += " " + cargs[i];
-                        }
+                        Util.Print("ÎŞĞ§µÄÃüÁî. Òª»ñÈ¡°ïÖúÇëÊäÈëhelp.", Util.PrintType.INFO, ConsoleColor.Red);
+                        continue;
+                    }
 
-                        if (lua.DoString(s))
+                    if (cargs[0] == "exit")
+                        break;
+                    if (cargs[0] == "test")
+                        Test();
+                    if (cargs[0] == "reload")
+                    {
+                        LoadUserLib();
+                        LoadPlugins();
+                    }
+                    else if (cargs[0] == "help")
+                    {
+                        Util.Print("°ïÖúÁĞ±í£º", Util.PrintType.INFO);
+                        Util.Print("help - »ñÈ¡°ïÖú", Util.PrintType.INFO);
+                        Util.Print("reload - ÖØÔØ²å¼ş", Util.PrintType.INFO);
+                        Util.Print("exit - ÍË³öMiraiLua", Util.PrintType.INFO);
+                        Util.Print("lua <´úÂë> - Ö´ĞĞÒ»¶ÎluaÎÄ±¾", Util.PrintType.INFO);
+                        Util.Print("Powered by ABSD", Util.PrintType.INFO);
+                    }
+                    else if (cargs[0] == "lua")
+                    {
+                        if (cargs.GetLength(0) >= 2)
                         {
-                            Util.Print(lua.ToString(-1), Util.PrintType.ERROR, ConsoleColor.Red);
-                            lua.Pop(1);
+                            string s = cargs[1];
+                            for (int i = 0; i < cargs.GetLength(0); i++)
+                            {
+                                if (i > 1)
+                                    s += " " + cargs[i];
+                            }
+
+                            if (lua.DoString(s))
+                            {
+                                Util.Print(lua.ToString(-1), Util.PrintType.ERROR, ConsoleColor.Red);
+                                lua.Pop(1);
+                            }
                         }
+                        else
+                            Util.Print("ÃüÁî¸ñÊ½: lua <´úÂë>", Util.PrintType.INFO, ConsoleColor.Red);
                     }
                     else
-                        Util.Print("å‘½ä»¤æ ¼å¼: lua <ä»£ç >", Util.PrintType.INFO, ConsoleColor.Red);
+                        Util.Print("ÎŞĞ§µÄÃüÁî. Òª»ñÈ¡°ïÖúÇëÊäÈëhelp.", Util.PrintType.INFO, ConsoleColor.Red);
                 }
-                else
-                    Util.Print("æ— æ•ˆçš„å‘½ä»¤. è¦è·å–å¸®åŠ©è¯·è¾“å…¥help.", Util.PrintType.INFO, ConsoleColor.Red);
             }
             return 0;
         }

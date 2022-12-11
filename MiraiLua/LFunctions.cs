@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Text;
 using KeraLua;
 using Mirai.Net.Sessions.Http.Managers;
-using System.IO;
-using System.Net;
-using System.Threading.Tasks;
 using Mirai.Net.Data.Messages.Concretes;
-using System.Runtime.InteropServices;
 using Mirai.Net.Data.Messages;
+using System.Collections.Generic;
 
 namespace MiraiLua
 {
@@ -31,7 +27,6 @@ namespace MiraiLua
         }
         static public int Reload(IntPtr p)
         {
-            Program.LoadUserLib();
             Program.LoadPlugins();
 
             return 0;
@@ -61,26 +56,100 @@ namespace MiraiLua
 
             return 0;
         }
-
-        static public int HttpGet(IntPtr p)
+        static public int HttpGetA(IntPtr p)
         {
             Lua lua = Lua.FromIntPtr(p);
+            var hs = new Dictionary<string, string>();
+            string u = lua.CheckString(1);
 
-            string serviceUrl = lua.CheckString(1);
-            //创建Web访问对  象
-            HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create(serviceUrl);
-            //通过Web访问对象获取响应内容
-            HttpWebResponse myResponse = (HttpWebResponse)myRequest.GetResponse();
-            //通过响应内容流创建StreamReader对象，因为StreamReader更高级更快
-            StreamReader reader = new StreamReader(myResponse.GetResponseStream(), Encoding.UTF8);
-            //string returnXml = HttpUtility.UrlDecode(reader.ReadToEnd());//如果有编码问题就用这个方法
-            string returnXml = reader.ReadToEnd();//利用StreamReader就可以从响应内容从头读到尾
-            reader.Close();
-            myResponse.Close();
+            lua.CheckType(2, LuaType.Function);
+            string k1 = lua.ToString(2);
 
-            lua.PushString(returnXml);
+            lua.CheckType(3, LuaType.Function);
+            string k2 = lua.ToString(3);
 
-            return 1;
+            lua.PushCopy(2);
+            lua.SetGlobal(k1);
+            lua.PushCopy(3);
+            lua.SetGlobal(k2);
+
+            hs.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:107.0) Gecko/20100101 Firefox/107.0");
+
+            if (lua.Type(4) == LuaType.Table)
+            {
+                lua.PushCopy(4);
+                lua.PushNil();
+                while (lua.Next(-2))
+                {
+                    lua.PushCopy(-2);
+                    if (lua.Type(-1) == LuaType.String && lua.Type(-2) == LuaType.String)
+                    {
+                        if (hs.TryGetValue(lua.ToString(-1), out string v))
+                            hs[lua.ToString(-1)] = lua.ToString(-2);
+                        else
+                            hs.Add(lua.ToString(-1), lua.ToString(-2));
+                    }
+
+                    lua.Pop(2);
+                }
+                lua.Pop(1);
+            }
+            
+            HttpRequest.GetAsync(u, k1, k2, p, hs);
+
+            return 0;
+        }
+        static public int HttpPostA(IntPtr p)
+        {
+            Lua lua = Lua.FromIntPtr(p);
+            var hs = new Dictionary<string, string>();
+            var pa = new Dictionary<string, string>();
+            string u = lua.CheckString(1);
+
+            lua.CheckType(2, LuaType.Function);
+            string k1 = lua.ToString(2);
+
+            lua.CheckType(3, LuaType.Function);
+            string k2 = lua.ToString(3);
+
+            lua.PushCopy(2);
+            lua.SetGlobal(k1);
+            lua.PushCopy(3);
+            lua.SetGlobal(k2);
+
+            hs.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:107.0) Gecko/20100101 Firefox/107.0");
+
+            if (lua.Type(4) == LuaType.Table)
+            {
+                lua.PushCopy(4);
+                lua.PushNil();
+                while (lua.Next(-2))
+                {
+                    lua.PushCopy(-2);
+                    if (lua.Type(-1) == LuaType.String && lua.Type(-2) == LuaType.String)
+                        pa.Add(lua.ToString(-1), lua.ToString(-2));
+                    lua.Pop(2);
+                }
+                lua.Pop(1);
+            }
+
+            if (lua.Type(5) == LuaType.Table)
+            {
+                lua.PushCopy(5);
+                lua.PushNil();
+                while (lua.Next(-2))
+                {
+                    lua.PushCopy(-2);
+                    if (lua.Type(-1) == LuaType.String && lua.Type(-2) == LuaType.String)
+                        hs.Add(lua.ToString(-1), lua.ToString(-2));
+                    lua.Pop(2);
+                }
+                lua.Pop(1);
+            }
+
+            HttpRequest.PostAsync(u, k1, k2, p, pa,hs);
+
+            return 0;
         }
 
         static public int UploadImg(IntPtr p)

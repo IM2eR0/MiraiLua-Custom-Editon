@@ -3,6 +3,12 @@
 - 原作者：[ABSD546316187](https://github.com/ABSD546316187)
 - 原项目地址：[传送门](https://github.com/ABSD546316187/MiraiLua)
 
+## 使用前须知
+- 打包环境：Windows 11 x64 | Vistual Studio 2022 | .NET Core 3.1
+- 打包目标：Linux x64 | 不依赖运行库
+- 最低要求：Glibc 版本 > 2.29
+- 测试环境：Debian 11
+
 ## 使用方法
 
 - 切换到MiraiLua所在文件夹后，在Linux控制台输入
@@ -14,27 +20,9 @@
   - `QQ` 是 [mirai](https://github.com/mamoe/mirai) 中配置的QQ号
   - `Key` 是 [mirai-api-http](https://github.com/project-mirai/mirai-api-http) 中配置的 `VerifyKey` (如果存在)
 - 配置 `base-libs/basic/init.lua` 第2行 `enableQ` 为启用的群列表
- 
-## 部分API
-
-本框架处于开发初期，以下列出已经开发好的api
-```lua
-void api.Reload()                                       --重载插件
-void api.SendGroupMsg(string GroupID, string text)      --发送群组消息
-void api.SendGroupMsgEX(string GroupID, ...)            --发送群组消息，后面为可变参数，可解析上传图片等高级接口返回的table
-void api.OnReceiveGroup(table data)                     --接收到消息后由C#调用，结构见下文
-string api.HttpGet(string url)                          --调用Http Api(GET)
-
-table api.UploadImg(string path)                        --上传本地图片，返回格式化表
-table api.At(string qq)                                 --艾特，返回格式化表
-```
-- 示例
-```lua
-function api.OnReceiveGroup(data)
-	PrintTable(data)
-end
-```
-因 Linux 版的特殊性，暂时不能提供输出，下个版本修复
+  
+## API
+- API已搬往 [MiraiLua社区论坛](https://teasmc.cn)
 
 ## 注意
 

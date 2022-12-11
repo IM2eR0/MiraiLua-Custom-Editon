@@ -23,7 +23,7 @@
 - 配置 `base-libs/basic/init.lua` 第2行 `enableQ` 为启用的群列表
   
 ## API
-- API已搬往 [MiraiLua社区论坛](https://teasmc.cn)
+- API已搬往 [MiraiLua | 社区论坛](https://teasmc.cn/d/26-mirailua-api%E4%B8%80%E8%A7%88)
 ## 注意
 
 - base-libs 文件夹用于存放MiraiLua的必要前置，这里的代码会被 C# 调用，切勿随意更改

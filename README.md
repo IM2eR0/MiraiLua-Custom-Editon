@@ -11,6 +11,20 @@
 
 ## 使用方法
 
+- 首先安装 .NET Core 3.1 Runtime，
+ -Debian 11
+ ```bash
+ wget https://packages.microsoft.com/config/debian/11/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+ sudo dpkg -i packages-microsoft-prod.deb
+ rm packages-microsoft-prod.deb
+ sudo apt-get install aspnetcore-runtime-3.1
+ ```
+ -CentOS
+ ```bash
+ sudo rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm
+ sudo yum install aspnetcore-runtime-3.1
+ ```
+ - 其余的Linux发行版请查看 [在 Linux 发行版上安装 .NET](https://learn.microsoft.com/zh-cn/dotnet/core/install/linux?WT.mc_id=dotnet-35129-website)
 - 切换到MiraiLua所在文件夹后，在Linux控制台输入
 ```bash
 ./MiraiLua

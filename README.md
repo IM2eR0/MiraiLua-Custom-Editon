@@ -12,14 +12,14 @@
 ## 使用方法
 
 - 首先安装 .NET Core 3.1 Runtime，
- -Debian 11
+ - Debian 11
  ```bash
  wget https://packages.microsoft.com/config/debian/11/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
  sudo dpkg -i packages-microsoft-prod.deb
  rm packages-microsoft-prod.deb
  sudo apt-get install aspnetcore-runtime-3.1
  ```
- -CentOS
+ - CentOS
  ```bash
  sudo rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm
  sudo yum install aspnetcore-runtime-3.1

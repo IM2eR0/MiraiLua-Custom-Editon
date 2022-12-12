@@ -19,7 +19,7 @@
   rm packages-microsoft-prod.deb
   sudo apt-get install aspnetcore-runtime-3.1
   ```
-  - CentOS
+  - CentOS 7
   ```bash
   sudo rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm
   sudo yum install aspnetcore-runtime-3.1

@@ -4,7 +4,7 @@
 - 原项目地址：[传送门](https://github.com/ABSD546316187/MiraiLua)
 
 ## 使用前须知
-- 打包环境：Windows 11 x64 | Vistual Studio 2022 | .NET Core 3.1
+- 打包环境：Windows 11 x64 | Vistual Studio 2022 | .NET 7.0
 - 打包目标：Linux x64 | 不依赖运行库
 - 最低要求：Glibc 版本 > 2.29
 - 测试环境：Debian 11

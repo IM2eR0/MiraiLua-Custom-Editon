@@ -11,6 +11,20 @@
 
 ## 使用方法
 
+- 首先安装 .NET Core 3.1 Runtime，
+  - Debian 11
+  ```bash
+  wget https://packages.microsoft.com/config/debian/11/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+  sudo dpkg -i packages-microsoft-prod.deb
+  rm packages-microsoft-prod.deb
+  sudo apt-get install aspnetcore-runtime-3.1
+  ```
+  - CentOS 7
+  ```bash
+  sudo rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm
+  sudo yum install aspnetcore-runtime-3.1
+  ```
+  - 其余的Linux发行版请查看 [在 Linux 发行版上安装 .NET](https://learn.microsoft.com/zh-cn/dotnet/core/install/linux?WT.mc_id=dotnet-35129-website)
 - 切换到MiraiLua所在文件夹后，在Linux控制台输入
 ```bash
 ./MiraiLua
@@ -23,7 +37,7 @@
 - 配置 `base-libs/basic/init.lua` 第2行 `enableQ` 为启用的群列表
   
 ## API
-- API已搬往 [MiraiLua社区论坛](https://teasmc.cn)
+- API已搬往 [MiraiLua | 社区论坛](https://teasmc.cn/d/26-mirailua-api%E4%B8%80%E8%A7%88)
 ## 注意
 
 - base-libs 文件夹用于存放MiraiLua的必要前置，这里的代码会被 C# 调用，切勿随意更改

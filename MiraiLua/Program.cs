@@ -13,25 +13,15 @@ using System.Linq;
 
 namespace MiraiLua
 {
-    class Program
+    static class Program
     {
         static public Util util = new Util();
         static public Lua lua = new Lua();
         static public MiraiBot bot;
         static public object o = new object();
-        static void Test()
-        {
-            lua.GetGlobal("test");
-            lua.PCall(0, 0, 0);
-            if (lua.GetTop() >= 1)
-                Util.Print(lua.ToString(-1), Util.PrintType.ERROR, ConsoleColor.Red);
-            lua.Pop(lua.GetTop());
-        }
-
         static void FileChanged(object sender, FileSystemEventArgs e)
         {
             Thread.Sleep(10);
-            //Util.Print("文件更新..." + e.FullPath);
             lock (o)
             {
                 if (lua.DoFile(e.FullPath))
@@ -166,17 +156,16 @@ namespace MiraiLua
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.Write("MiraiLua for Linux ");
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write("v1.1");
+            Console.Write("v1.1.5");
             Console.ForegroundColor = ConsoleColor.White;
             Console.Write("\nby OriginalSnow\n");
             Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.Write("\n\n\tMiraiLua by ABSD\n\n\n");
+            Console.Write("\n\n\tMiraiLua v1.1 by ABSD\n\n\n");
 
             Util.Print("正在启动MiraiLua...");
 
             ////////////////LUA///////////////////
-            lua.Encoding = Encoding.UTF8;
-            Util.Print("当前正在使用编码：" + lua.Encoding);
+            Util.Print("打包框架：.NET 7.0");
 
             lua.Register("print", LFunctions.Print);
 
@@ -301,8 +290,7 @@ namespace MiraiLua
 
                     if (cargs[0] == "exit")
                         break;
-                    if (cargs[0] == "test")
-                        Test();
+
                     if (cargs[0] == "reload")
                     {
                         LoadUserLib();

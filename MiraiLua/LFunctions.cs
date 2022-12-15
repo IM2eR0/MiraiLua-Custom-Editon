@@ -5,9 +5,9 @@ using Mirai.Net.Data.Messages.Concretes;
 using Mirai.Net.Data.Messages;
 using System.Collections.Generic;
 
-namespace MiraiLua
+namespace MiraiLua 
 {
-    class LFunctions
+    static class LFunctions
     {
         static public int Print(IntPtr p)
         {

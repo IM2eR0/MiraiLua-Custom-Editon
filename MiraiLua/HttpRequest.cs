@@ -7,7 +7,7 @@ namespace MiraiLua
     /// <summary>
     /// 配套Lua的Http请求类。
     /// </summary>
-    class HttpRequest
+    static class HttpRequest
     {
         /// <summary>
         /// 键值结构体

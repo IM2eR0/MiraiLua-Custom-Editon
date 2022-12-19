@@ -26,8 +26,4 @@
 ## 注意
 
 - base-libs 文件夹用于存放MiraiLua的必要前置，这里的代码会被 C# 调用，切勿随意更改
-- user-libs 文件夹用于存放用户前置
-- user-plugins 文件夹用于存放用户插件
-
-- 加载顺序如下 base-libs > user-libs > user-plugins
-- `每个文件夹下的插件按照文件夹名的先后顺序进行排序 例：特殊符号 > 数字 0~9 > 大写字母 A~Z > 小写字母 a~z`
+- plugins 文件夹用于存放用户插件

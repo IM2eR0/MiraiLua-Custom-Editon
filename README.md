@@ -7,15 +7,18 @@
 
 ## 使用前须知
 - 打包环境：Windows 11 x64 | Vistual Studio 2022 | .NET 7.0
-- 打包目标：Linux x64 | 不依赖运行库
-- 最低要求：Glibc 版本 > 2.29
-- 测试环境：Debian 11
+
+- 系统要求相关：
+  - Linux: Glibc 版本 > 2.29，指令集 x86_64，操作系统位数：64位
+  - Windows: Windows 10 (Windows Server 2016)以上，指令集 x86_64，操作系统位数：32位
 
 ## 使用方法
-- 切换到MiraiLua所在文件夹后，在Linux控制台输入
+- Linux: 切换到MiraiLua所在文件夹后，在Linux控制台输入
 ```bash
-./MiraiLua
+./MCE
 ```
+- Windows: 双击MCE.exe
+
 - 配置主程序目录下的 `settings.xml`
   - `Address` 是 [mirai-api-http](https://github.com/project-mirai/mirai-api-http) 中配置的地址
   - `QQ` 是 [mirai](https://github.com/mamoe/mirai) 中配置的QQ号

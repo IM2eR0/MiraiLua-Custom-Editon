@@ -4,6 +4,10 @@ using Mirai.Net.Sessions.Http.Managers;
 using Mirai.Net.Data.Messages.Concretes;
 using Mirai.Net.Data.Messages;
 using System.Collections.Generic;
+using Mirai.Net.Utils.Scaffolds;
+using System.Reactive;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace MiraiLua 
 {
@@ -290,6 +294,22 @@ namespace MiraiLua
             }
             MessageManager.SendGroupMessageAsync(id, mc);
             Util.Print("发送消息： " + id + " :" + s);
+            return 0;
+        }
+
+        static public int TextToImage(IntPtr p)
+        {
+            Lua lua = Lua.FromIntPtr(p);
+            string text = lua.CheckString(1);
+
+            new ImageHelper().CreateImage(text, @"./临时文件夹/TextToImage.png");
+
+            return 0;
+        }
+
+        static public int DelImg(IntPtr p)
+        {
+            File.Delete(@"./临时文件夹/TextToImage.png");
             return 0;
         }
     }

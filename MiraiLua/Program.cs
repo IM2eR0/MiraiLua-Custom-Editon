@@ -10,15 +10,19 @@ using System.Threading;
 using System.Xml;
 using System.Linq;
 
-using System.Runtime.InteropServices;
 using MiraiLua.Classes;
-using System.Collections;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace MiraiLua
 {
     static class Program
     {
+        static string PROGRAM_NAME = "MiraiLua Custom Edition";
+        static string AUTHOR = "初雪 OriginalSnow";
+        static string VERSION = "1.3";
+
+
         static public Util util = new Util();
         static public Lua lua = new Lua();
         static public MiraiBot bot;
@@ -123,18 +127,18 @@ namespace MiraiLua
                 }
             }
         }
-        static int Main(string[] args)
+        static async Task<int> Main(string[] args)
         {
             Console.ForegroundColor = ConsoleColor.Blue;
-            Console.Write("MiraiLua for Linux ");
+            Console.Write($"{PROGRAM_NAME} ");
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write("v1.2 - Preview 1");
+            Console.Write($"v{VERSION}");
             Console.ForegroundColor = ConsoleColor.White;
-            Console.Write("\nby OriginalSnow\n");
+            Console.Write($"\nby {AUTHOR}\n");
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.Write("\n\n\tMiraiLua v1.2 by ABSD\n\n\n");
 
-            Util.Print("正在启动MiraiLua...");
+            Util.Print("正在启动 MiraiLua Custom Editon");
 
             ////////////////LUA///////////////////
             Util.Print("打包框架：.NET 7.0");
@@ -157,8 +161,17 @@ namespace MiraiLua
             Util.PushFunction("api", "HttpPost", lua, LFunctions.HttpPostA);
             Util.PushFunction("api", "UploadImg", lua, LFunctions.UploadImg);
             Util.PushFunction("api", "At", lua, LFunctions.At);
+            Util.PushFunction("api", "TextToImage", lua, LFunctions.TextToImage);
+            Util.PushFunction("api", "DelImg",lua,LFunctions.DelImg);
             lua.Pop(lua.GetTop());
             //加载脚本
+
+            if (!Directory.Exists($".{g}临时文件夹"))
+            {
+                Directory.CreateDirectory($".{g}临时文件夹");
+                Util.Print("正在初始化临时文件夹中...", Util.PrintType.WARNING);
+            }
+
             LoadLibPlugins();
             LoadPlugins();
             //////////////////////////////////////
@@ -182,7 +195,9 @@ namespace MiraiLua
                     VerifyKey = v
                 };
 
-                bot.LaunchAsync();
+                Util.Print(String.Format("正在尝试连接Bot：{0:G} / {1:G}", a, q));
+
+                await bot.LaunchAsync();
 
                 Util.Print(String.Format("Bot已连接：{0:G} / {1:G}", a, q));
             }

@@ -1,4 +1,4 @@
-# MiraiLua For Linux
+# MiraiLua Custom Editon
 - 提示：因最新版 MiraiLua 新增模块功能，Linux暂时停止后续维护以及更新，将由最新的 MiraiLua Custom Editon 继续维护
 - 提示：因 MiraiLua Custom Editon(MCE) 不具备模块化功能，如有需要的功能请提交至Issue
 - MiraiLua是基于 [Mirai.Net](https://github.com/SinoAHpx/Mirai.Net) / [mirai-api-http](https://github.com/project-mirai/mirai-api-http) 编写的以Lua为脚本引擎的QQ机器人框架。
